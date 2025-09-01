@@ -576,6 +576,7 @@ class PiperInterface:
   def command_joint_torque_mit(
       self,
       motor_idx: int,
+      position: float,
       torque: float,
   ) -> None:
     """
@@ -589,7 +590,7 @@ class PiperInterface:
       torque (float): The torque command for the motor to execute.
     """
     assert motor_idx >= 0 and motor_idx <= 5
-    self.piper.JointMitCtrl(motor_idx + 1, 0.0, 0.0, 0.0, 0.0, torque)
+    self.piper.JointMitCtrl(motor_idx + 1, position, 0.0, 0.0, 0.0, torque)
 
   def command_cartesian_position(self, pose: Sequence[float]) -> None:
     """

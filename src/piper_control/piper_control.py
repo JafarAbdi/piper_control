@@ -354,12 +354,14 @@ class MitJointPositionController(JointPositionController):
 
     assert len(torques) == 6
 
-    for ji, torque in enumerate(torques):
+    positions = self._piper.get_joint_positions()
+    for ji, (pos, torque) in enumerate(zip(positions, torques)):
       if self._joint_flip_map:
         torque = -torque if self._joint_flip_map[ji] else torque
       torque = np.clip(torque, -_MIT_TORQUE_LIMITS[ji], _MIT_TORQUE_LIMITS[ji])
 
-      self._piper.command_joint_torque_mit(ji, torque)
+      self._piper.command_joint_torque_mit(ji, pos, torque)
+      time.sleep(0.001)
 
   def _smoothly_move_to_position(
       self,
